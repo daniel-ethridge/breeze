@@ -12,6 +12,8 @@
  * 
  * @tparam The enum class to use in creating the bit flags. The enum class's members must be powers of two. Using
  * anything other than an enum class designed in this way will result in undefined behavior. 
+ * @tparam Integer type. Defaults to int which allows for 16 different state values or booleans. Other values such as
+ * long int can be used instead to allow for more states. 
  */
 template <typename T, typename int_type = int>
 class BitFlag
