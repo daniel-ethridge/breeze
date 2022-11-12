@@ -4,16 +4,13 @@
 #include <vector>
 
 /**
- * @brief A templated class implementing that can be used with enum classes in 
- * order to create bitflags.
+ * @brief A templated class implementing that can be used with enum classes in order to create bitflags.
  * 
- * This class can be used to create bitflags from any enum class whose members
- * are all set to ascending powers of 2 starting from one (eg 0x1, 0x2, 0x4,
- * 0x8, 0x10, etc or 1 << 0, 1 << 2, 1 << 3, etc.). 
+ * This class can be used to create bitflags from any enum class whose members are all set to ascending powers of 2 
+ * starting from one (eg 0x1, 0x2, 0x4, 0x8, 0x10, etc or 1 << 0, 1 << 2, 1 << 3, etc.). 
  * 
- * @tparam The enum class to use in creating the bit flags. The enum class's 
- * members must be powers of two. Using anything other than an enum class 
- * designed in this way will result in undefined behavior. 
+ * @tparam The enum class to use in creating the bit flags. The enum class's members must be powers of two. Using
+ * anything other than an enum class designed in this way will result in undefined behavior. 
  */
 template <typename T>
 class BitFlag
@@ -22,9 +19,8 @@ public:
   /**
    * @brief Construct a new Bit Flag object
    * 
-   * @param numFlags Optionally include the number of flags. This corresponds
-   * to the number of members in the enum class. A nice way to have this value
-   * is to end the enum class with a member named 'COUNT'.
+   * @param numFlags Optionally include the number of flags. This corresponds to the number of members in the enum 
+   * class. A nice way to have this value is to end the enum class with a member named 'COUNT'.
    */
   BitFlag(int numFlags = 0) :
     m_flags(0),
@@ -35,9 +31,8 @@ public:
    * @brief Construct a new Bit Flag object
    * 
    * @param flag A flag whose initial value will be 'on'.
-   * @param numFlags Optionally include the number of flags. This corresponds
-   * to the number of members in the enum class. A nice way to have this value
-   * is to end the enum class with a member named 'COUNT'.
+   * @param numFlags Optionally include the number of flags. This corresponds to the number of members in the enum 
+   * class. A nice way to have this value is to end the enum class with a member named 'COUNT'.
    */
   BitFlag(T flag, int numFlags = 0) : 
     m_flags(static_cast<int>(flag)),
@@ -48,9 +43,8 @@ public:
    * @brief Construct a new Bit Flag object
    * 
    * @param flags Multiple flags whose initial value will be 'on'.
-   * @param numFlags Optionally include the number of flags. This corresponds
-   * to the number of members in the enum class. A nice way to have this value
-   * is to end the enum class with a member named 'COUNT'.
+   * @param numFlags Optionally include the number of flags. This corresponds to the number of members in the enum 
+   * class. A nice way to have this value is to end the enum class with a member named 'COUNT'.
    */
   BitFlag(std::vector<T> flags, int numFlags = 0) :
     m_flags(0),
@@ -77,8 +71,7 @@ public:
   /**
    * @brief Switch a flag's value. 
    * 
-   * This method will turn off a currently active flag, and it will turn on a 
-   * currently inactive flag.
+   * This method will turn off a currently active flag, and it will turn on a currently inactive flag.
    * 
    * @param flag The flag to switch.
    */
@@ -109,8 +102,8 @@ public:
   /**
    * @brief Switch multiple flags' values.
    * 
-   * This method will turn off the currently active flags that were passed, and 
-   * it will turn on the currently inactive flags.
+   * This method will turn off the currently active flags that were passed, and it will turn on the currently inactive 
+   * flags.
    * 
    * @param flags The flags to switch.
    */
@@ -123,12 +116,11 @@ public:
   /**
    * @brief Turn all flags on.
    * 
-   * This methods needs to know how many flags there are. If the number of flags
-   * was not passed in the constructor, it must be passed here. If it is not,
-   * this method does nothing.
+   * This methods needs to know how many flags there are. If the number of flags was not passed in the constructor, it 
+   * must be passed here. If it is not, this method returns false.
    * 
-   * @param numFlags The total number of flags in the object. Only needs to be
-   * passed if it was not passed in the constructor.
+   * @param numFlags The total number of flags in the object. Only needs to be passed if it was not passed in the 
+   * constructor.
    */
   void setAll(int numFlags = 0)
   {
@@ -156,12 +148,11 @@ public:
   /**
    * @brief Flip all flags to their opposite value.
    * 
-   * This methods needs to know how many flags there are. If the number of flags
-   * was not passed in the constructor, it must be passed here. If it is not,
-   * this method does nothing.
+   * This methods needs to know how many flags there are. If the number of flags was not passed in the constructor, it 
+   * must be passed here. If it is not, this method returns false.
    * 
-   * @param numFlags The total number of flags in the object. Only needs to be
-   * passed if it was not passed in the constructor.
+   * @param numFlags The total number of flags in the object. Only needs to be passed if it was not passed in the 
+   * constructor.
    */
   void flipAll(int numFlags = 0) 
   {
@@ -237,27 +228,26 @@ public:
   /**
    * @brief Determines whether or not all flags are turned on.
    * 
-   * This methods needs to know how many flags there are. If the number of flags
-   * was not passed in the constructor, it must be passed here. If it is not,
-   * this method returns false.
+   * This methods needs to know how many flags there are. If the number of flags was not passed in the constructor, it 
+   * must be passed here. If it is not, this method returns false.
    * 
-   * @param numFlags The total number of flags in the object. Only needs to be
-   * passed if it was not passed in the constructor.
+   * @param numFlags The total number of flags in the object. Only needs to be passed if it was not passed in the 
+   * constructor.
    * @return True if all flags are turned on. Otherwise false.
    */
   bool hasAllFlags(int numFlags)
   {
-    int count;
+    int count;  // Allocate memory
 
+    // Set count according to the number of flags. Priorize the method argument.
     if (numFlags)
       count = numFlags;
-
     else if (m_numFlags)
       count = m_numFlags;
-
     else
-      return;
+      return false;
 
+    // Determine the result;
     bool result;
     for (int i = 0; i < count; i++)
     {
@@ -269,16 +259,8 @@ public:
   }
 
 private:
-  /**
-   * @brief The current activated flags, stored as an integer.
-   */
-  unsigned int m_flags;
-
-  /**
-   * @brief The number of flags. A value of 0 means the number of flags is 
-   * unknown.
-   */
-  unsigned int m_numFlags;
+  unsigned int m_flags;  ///< The current activated flags, stored as an integer.
+  unsigned int m_numFlags;  ///< The number of flags. A value of 0 means the number of flags is unknown.
 };
 
 #endif  // _BREEZE_BITFLAGS_H_
