@@ -13,6 +13,12 @@ project(Breeze
 # )
 
 include(CTest)
-enable_testing()
 
-add_subdirectory(test/bitflags)
+if (BUILD_TESTING)
+  message(STATUS "Tests will be built.")
+  enable_testing()
+
+  # All test subdirectories included here.
+  add_subdirectory(test/bitflags)
+
+endif (BUILD_TESTING)

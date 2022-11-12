@@ -2,6 +2,7 @@
 #define _BREEZE_BITFLAGS_H_
 
 #include <vector>
+#include <iostream>
 
 /**
  * @brief A templated class implementing that can be used with enum classes in order to create bitflags.
@@ -12,7 +13,7 @@
  * @tparam The enum class to use in creating the bit flags. The enum class's members must be powers of two. Using
  * anything other than an enum class designed in this way will result in undefined behavior. 
  */
-template <typename T>
+template <typename T, typename int_type = int>
 class BitFlag
 {
 public:
@@ -24,7 +25,7 @@ public:
    */
   BitFlag(int numFlags = 0) :
     m_flags(0),
-    m_numFlags(0)
+    m_numFlags(numFlags)
   {}
 
   /**
@@ -35,7 +36,7 @@ public:
    * class. A nice way to have this value is to end the enum class with a member named 'COUNT'.
    */
   BitFlag(T flag, int numFlags = 0) : 
-    m_flags(static_cast<int>(flag)),
+    m_flags(static_cast<int_type>(flag)),
     m_numFlags(numFlags)
   {}
 
@@ -51,7 +52,7 @@ public:
     m_numFlags(numFlags)
   {
     for (auto flag : flags)
-      m_flags += static_cast<int>(flag);
+      m_flags += static_cast<int_type>(flag);
   }
 
   /**
@@ -59,14 +60,14 @@ public:
    * 
    * @param flag The flag to turn on.
    */
-  void setFlag(T flag) { m_flags |= static_cast<int>(flag); }
+  void setFlag(T flag) { m_flags |= static_cast<int_type>(flag); }
 
   /**
    * @brief Turn off a flag.
    * 
    * @param flag The flag to turn off.
    */
-  void unsetFlag(T flag) { m_flags &= ~static_cast<int>(flag); }
+  void unsetFlag(T flag) { m_flags &= ~static_cast<int_type>(flag); }
 
   /**
    * @brief Switch a flag's value. 
@@ -75,7 +76,7 @@ public:
    * 
    * @param flag The flag to switch.
    */
-  void flipFlag(T flag) { m_flags ^= static_cast<int>(flag); }
+  void flipFlag(T flag) { m_flags ^= static_cast<int_type>(flag); }
 
   /**
    * @brief Turn on multiple flags.
@@ -110,7 +111,7 @@ public:
   void flipFlags(std::vector<T> flags)
   {
     for (auto flag : flags)
-      flipFlags(flag);
+      flipFlag(flag);
   }
 
   /**
@@ -122,7 +123,7 @@ public:
    * @param numFlags The total number of flags in the object. Only needs to be passed if it was not passed in the 
    * constructor.
    */
-  void setAll(int numFlags = 0)
+  void setAllFlags(int numFlags = 0)
   {
     int count;
 
@@ -133,17 +134,19 @@ public:
       count = m_numFlags;
 
     else
-      return;
+      throw;
   
     m_flags = 0;
-    for (int i = 0; i < count; i++)
-      m_flags += (1 << i);
+    for (int_type i = 0; i < count; i++)
+    {
+      setFlag(static_cast<T>(1 << i));
+    }
   }
 
   /**
    * @brief Turn off all flags.
    */
-  void unsetAll() { m_flags = 0; }
+  void unsetAllFlags() { m_flags = 0; }
 
   /**
    * @brief Flip all flags to their opposite value.
@@ -154,7 +157,7 @@ public:
    * @param numFlags The total number of flags in the object. Only needs to be passed if it was not passed in the 
    * constructor.
    */
-  void flipAll(int numFlags = 0) 
+  void flipAllFlags(int numFlags = 0) 
   {
     int count;
 
@@ -165,10 +168,10 @@ public:
       count = m_numFlags;
 
     else
-      return;
+      throw;
   
-    for (int i = 0; i < count; i++)
-      m_flags ^= (1 << i);
+    for (int_type i = 0; i < count; i++)
+      flipFlag(static_cast<T>(i));
   }
 
   /**
@@ -177,7 +180,7 @@ public:
    * @param flag The flag to check.
    * @return Whether or not the passed flag is turned on.
    */
-  bool flagOn(T flag) { return m_flags & flag; }
+  bool hasFlag(T flag) { return m_flags & static_cast<int_type>(flag); }
 
   /**
    * @brief Determines whether any of the passed flags are turned on.
@@ -185,12 +188,12 @@ public:
    * @param flags The flags to check. 
    * @return true 
    */
-  bool hasAnyFlags(std::vector<T> flags)
+  bool hasAnyFlag(std::vector<T> flags)
   {
     bool result;
     for (auto flag : flags)
     {
-      result = m_flags & flag;
+      result = hasFlag(flag);
       if (result)
         return result;
     }
@@ -202,7 +205,7 @@ public:
    * 
    * @return Whether or not there are any flags turned on.
    */
-  bool hasAnyFlags()
+  bool hasAnyFlag()
   {
     return static_cast<bool>(m_flags);
   }
@@ -218,7 +221,7 @@ public:
     bool result;
     for (auto flag : flags)
     {
-      result = m_flags & flag;
+      result = hasFlag(flag);
       if (!result)
         return result;
     }
@@ -235,7 +238,7 @@ public:
    * constructor.
    * @return True if all flags are turned on. Otherwise false.
    */
-  bool hasAllFlags(int numFlags)
+  bool hasAllFlags(int numFlags = 0)
   {
     int count;  // Allocate memory
 
@@ -245,13 +248,13 @@ public:
     else if (m_numFlags)
       count = m_numFlags;
     else
-      return false;
+      throw;
 
     // Determine the result;
     bool result;
-    for (int i = 0; i < count; i++)
+    for (int_type i = 0; i < count; i++)
     {
-      result = m_flags & (1 << i);
+      result = hasFlag(static_cast<T>(1 << i));
       if (!result)
         return result;
     }
@@ -259,7 +262,7 @@ public:
   }
 
 private:
-  unsigned int m_flags;  ///< The current activated flags, stored as an integer.
+  int_type m_flags;  ///< The current activated flags, stored as an integer.
   unsigned int m_numFlags;  ///< The number of flags. A value of 0 means the number of flags is unknown.
 };
 
