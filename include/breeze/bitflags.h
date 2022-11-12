@@ -10,9 +10,9 @@
  * This class can be used to create bitflags from any enum class whose members are all set to ascending powers of 2 
  * starting from one (eg 0x1, 0x2, 0x4, 0x8, 0x10, etc or 1 << 0, 1 << 2, 1 << 3, etc.). 
  * 
- * @tparam The enum class to use in creating the bit flags. The enum class's members must be powers of two. Using
+ * @tparam EnumClass The enum class to use in creating the bit flags. The enum class's members must be powers of two. Using
  * anything other than an enum class designed in this way will result in undefined behavior. 
- * @tparam Integer type. Defaults to int which allows for 16 different state values or booleans. Other values such as
+ * @tparam IntegerType Defaults to int which allows for 16 different state values or booleans. Other values such as
  * long int can be used instead to allow for more states. 
  */
 template <typename T, typename int_type = int>
