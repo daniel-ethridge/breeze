@@ -4,6 +4,9 @@
 #include <vector>
 #include <iostream>
 
+namespace Breeze
+{
+
 /**
  * @brief A templated class implementing that can be used with enum classes in order to create bitflags.
  * 
@@ -267,5 +270,7 @@ private:
   int_type m_flags;  ///< The current activated flags, stored as an integer.
   unsigned int m_numFlags;  ///< The number of flags. A value of 0 means the number of flags is unknown.
 };
+
+}  // namespace Breeze
 
 #endif  // _BREEZE_BITFLAGS_H_

@@ -1,4 +1,4 @@
-#include "breeze/bitflags.h"
+#include <breeze/bitflags.h>
 
 enum class TestClass
 {
@@ -23,9 +23,9 @@ enum class TestClass
  */
 int main()
 {
-  BitFlag<TestClass> bf1(static_cast<int>(TestClass::count));
-  BitFlag<TestClass, int> bf2(TestClass::b);
-  BitFlag<TestClass, long int> bf3({ TestClass::a, TestClass::d });
+  Breeze::BitFlag<TestClass> bf1(static_cast<int>(TestClass::count));
+  Breeze::BitFlag<TestClass, int> bf2(TestClass::b);
+  Breeze::BitFlag<TestClass, long int> bf3({ TestClass::a, TestClass::d });
 
   bf1.setFlag(TestClass::a);
   if (!bf1.hasFlag(TestClass::a))

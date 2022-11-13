@@ -24,3 +24,13 @@ Bit flags are a useful tool to represent multiple boolean values or states in a 
 created using enums, but enums are an unscoped type. Often enum classes are preferred due to being a scoped type, but
 this makes it a bit trickier to use them as Bitflags. <i>Breeze</i> includes a templated class called
 BitFlags to make creating them simple. Check out the documentation (coming soon) for more information!
+
+### Math
+
+```#include <breeze/math.h>```
+
+Helpful mathematical tools
+
+#### Polynomial
+
+Create polynomials of order n. They must be in the form $f(x) = a_0 + a_1x + a_2x^2 + ... + a_nx^n$.

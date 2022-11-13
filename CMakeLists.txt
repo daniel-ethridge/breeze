@@ -20,5 +20,6 @@ if (BUILD_TESTING)
 
   # All test subdirectories included here.
   add_subdirectory(test/bitflags)
+  add_subdirectory(test/math)
 
 endif (BUILD_TESTING)

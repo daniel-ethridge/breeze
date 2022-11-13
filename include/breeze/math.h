@@ -50,7 +50,7 @@ public:
    * @param inputVal The value to evaluate
    * @return T The output value
    */
-  T operator()(T inputVal) { return function(T); }
+  T operator()(T inputVal) { return function(inputVal); }
 
 private:
   std::vector<T> m_coefficients;  ///< Polynomial coefficients
@@ -78,4 +78,4 @@ private:
 
 }
 
-#endif _BREEZE_MATH_H_
+#endif  // _BREEZE_MATH_H_
