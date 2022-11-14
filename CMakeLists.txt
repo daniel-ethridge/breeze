@@ -5,13 +5,25 @@ project(Breeze
   DESCRIPTION "A helper library with implementations of various useful tools"
   LANGUAGES CXX)
 
-# target_include_directories(breeze
-#   PUBLIC
-#     ${CMAKE_SOURCE_DIR}/include
-#   PRIVATE
-#     ${CMAKE_SOURCE_DIR}/include/breeze
-# )
+set(BREEZE_INC ${CMAKE_SOURCE_DIR}/include/breeze)
 
+set(BITFLAGS ${BREEZE_INC}/bitflags.h)
+source_group("Include" FILES ${BITFLAGS})
+
+add_library(breeze
+  ${BITFLAGS})
+
+set_target_properties(breeze
+  PROPERTIES LINKER_LANGUAGE CXX)
+
+target_include_directories(breeze
+  PUBLIC
+    ${CMAKE_SOURCE_DIR}/include
+  PRIVATE
+    ${CMAKE_SOURCE_DIR}/include/breeze
+)
+
+set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)  # Removes random added projects in IDE generation
 include(CTest)
 
 if (BUILD_TESTING)
