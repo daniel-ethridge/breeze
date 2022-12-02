@@ -1,4 +1,4 @@
-set(TEST_NAME bitflags-t)
+set(TEST_NAME timer-t)
 
 project(${TEST_NAME})
 
@@ -8,5 +8,9 @@ add_executable(${TEST_NAME}
 target_include_directories(${TEST_NAME}
   PUBLIC
   ${CMAKE_SOURCE_DIR}/include)
+
+target_link_libraries(${TEST_NAME}
+  PRIVATE
+  breeze)
 
 add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})

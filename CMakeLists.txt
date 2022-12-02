@@ -5,12 +5,15 @@ project(Breeze
   DESCRIPTION "A helper library with implementations of various useful tools"
   LANGUAGES CXX)
 
-# target_include_directories(breeze
-#   PUBLIC
-#     ${CMAKE_SOURCE_DIR}/include
-#   PRIVATE
-#     ${CMAKE_SOURCE_DIR}/include/breeze
-# )
+add_library(breeze
+  src/timer.cpp)
+
+target_include_directories(breeze
+  PUBLIC
+    ${CMAKE_SOURCE_DIR}/include
+  PRIVATE
+    ${CMAKE_SOURCE_DIR}/include/breeze
+)
 
 include(CTest)
 
@@ -20,5 +23,6 @@ if (BUILD_TESTING)
 
   # All test subdirectories included here.
   add_subdirectory(test/bitflags)
+  add_subdirectory(test/timer)
 
 endif (BUILD_TESTING)
