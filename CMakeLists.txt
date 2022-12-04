@@ -6,7 +6,7 @@ project(Breeze
   LANGUAGES CXX)
 
 add_library(breeze
-  src/timer.cpp)
+	${CMAKE_SOURCE_DIR}/src/time/stopwatch.cpp)
 
 target_include_directories(breeze
   PUBLIC
@@ -23,6 +23,6 @@ if (BUILD_TESTING)
 
   # All test subdirectories included here.
   add_subdirectory(test/bitflags)
-  add_subdirectory(test/timer)
+  add_subdirectory(test/stopwatch)
 
 endif (BUILD_TESTING)

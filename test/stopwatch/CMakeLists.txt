@@ -1,4 +1,4 @@
-set(TEST_NAME timer-t)
+set(TEST_NAME stopwatch-t)
 
 project(${TEST_NAME})
 
