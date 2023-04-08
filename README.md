@@ -1,4 +1,4 @@
-# Breeze
+# <span style="color:red">Breeze</span>
 
 The goal of this library is to help make coding a breeze through supplying libraries, templated classes and templated
 methods that address coding difficulties associate with more obscure C++ concepts.
