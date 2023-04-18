@@ -1,5 +1,3 @@
-project(bitflags-test)
-
 add_executable(bitflags-test
   bitflags-t.cpp)
 

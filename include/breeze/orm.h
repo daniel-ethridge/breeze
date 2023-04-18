@@ -15,73 +15,93 @@
 	u_attributes.push_back({ column_name, QVariant::fromValue(db_column_type) });     \
 	u_map[static_cast<int>(u_attributes.size() - 1)] = [this](const QVariant& val) { this->member_var.push_back(val.qvariant_toT_method); }
 
-namespace Breeze::Orm
+namespace Breeze
 {
-	enum class DbColumnTypes
+	namespace Orm
 	{
-		INTEGER,
-		FLOAT,
-		STRING,
+		enum class DbColumnTypes
+		{
+			INTEGER,
+			FLOAT,
+			STRING,
 #ifdef PGSQL
-		INTEGER_ARR,
-		FLOAT_ARR,
+			INTEGER_ARR,
+			FLOAT_ARR,
 #endif PGSQL
-		COUNT
-	};
-	Q_DECLARE_METATYPE(DbColumnTypes);
+			COUNT
+		};
+		Q_DECLARE_METATYPE(DbColumnTypes);
 
-	enum class DbDrivers
-	{
-		POSTGRESQL
-	};
+		enum class DbDrivers
+		{
+			POSTGRESQL
+		};
 
-	class DatabaseConnection : public QSqlDatabase
-	{};
+		class DatabaseConnection : public QSqlDatabase
+		{};
 
-	DatabaseConnection createDbConnection(DbDrivers      driver,
-	                                      const QString& hostName,
-	                                      const QString& databaseName,
-	                                      const QString& username,
-	                                      const QString& password,
-	                                      const QString& connectionName = "");
+		QSqlDatabase createDbConnection(DbDrivers      driver,
+			const QString& hostName,
+			const QString& databaseName,
+			const QString& username,
+			const QString& password,
+			const QString& connectionName = "");
 
-	class Model;
-	class QueryBuilder
-	{
-	public:
-		QueryBuilder(Model* model);
-		QueryBuilder& select(const QVector<QString>& columns);
-		QueryBuilder& select(const QString& column);
-		/*QueryBuilder<T>& where(const QString& LHS, const QString& op, const QString& RHS);*/
-		void        run();
-		static void run(const QString& queryStr);
+		class Model;
+		class QueryBuilder
+		{
+		public:
+			QueryBuilder(Model* model);
+			QueryBuilder& select(const QVector<QString>& columns);
+			QueryBuilder& select(const QString& column);
 
-	private:
-		QString m_query = "";
-		Model*  m_model;
-	};
+			QueryBuilder& where(const QString& LHS, const QString& op, const QString& RHS);
+			QueryBuilder& whereEq(const QString& LHS, const QString& RHS);
+			QueryBuilder& whereEq(const QString& LHS, int RHS);
+			QueryBuilder& whereEq(const QString& LHS, double RHS);
 
-	class Model
-	{
-	public:
-		Model(const QString& tablename);
-		void    create();
-		void    update(const QVector<QVariantList>& values);
-		QString tablename();
+			QueryBuilder& whereGreater(const QString& LHS, int RHS);
+			QueryBuilder& whereGreater(const QString& LHS, double RHS);
+			QueryBuilder& whereGreaterEq(const QString& LHS, int RHS);
+			QueryBuilder& whereGreaterEq(const QString& LHS, double RHS);
 
-		QueryBuilder& buildQuery();
-		void          parseQuery(QSqlQuery&& query);
+			QueryBuilder& whereLess(const QString& LHS, int RHS);
+			QueryBuilder& whereLess(const QString& LHS, double RHS);
+			QueryBuilder& whereLessEq(const QString& LHS, int RHS);
+			QueryBuilder& whereLessEq(const QString& LHS, double RHS);
 
-	protected:
-		QVector<QVariantList>                               u_attributes;
-		std::map<int, std::function<void(const QVariant&)>> u_map;
-		QString                                             u_tableName;
+			QueryBuilder& and_ ();
+			QueryBuilder& or_ ();
 
-	private:
-		QueryBuilder m_queryBuilder;
-		QString      columns();
-		QString      convertValues(const QVariantList& values);
-	};
-}  // namespace Breeze::Orm
+			virtual void run(const QString& queryStr = "");
+
+		private:
+			QString m_query = "";
+			Model* m_model;
+		};
+
+		class Model
+		{
+		public:
+			Model(const QString& tablename);
+			void    create();
+			void    update(const QVector<QVariantList>& values);
+			QString tablename();
+
+			QueryBuilder& buildQuery();
+			void          parseQuery(QSqlQuery&& query);
+
+		protected:
+			QVector<QVariantList>                               u_attributes;
+			std::map<int, std::function<void(const QVariant&)>> u_map;
+			QString                                             u_tableName;
+
+		private:
+			QueryBuilder m_queryBuilder;
+			QString      columns();
+			QString      convertValues(const QVariantList& values);
+		};
+	}  // namespace Orm
+}  // namespace Breeze
 
 #endif  // _BREEZE_ORM_H_
